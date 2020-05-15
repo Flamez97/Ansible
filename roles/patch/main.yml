@@ -1,0 +1,4 @@
+- name: Patch Server
+  yum:
+    name: '*'
+    state: latest

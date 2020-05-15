@@ -1,0 +1,181 @@
+---
+# tasks file for /var/lib/awx/projects/vmware/roles/Drupal
+
+#- name: Remove rpm
+#  shell: rpm -e mysql57-community-release-el7-9.noarch.rpm
+
+#- name: Get sql rpm
+#  get_url:
+#    url: https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+#    dest: /home/flamez97/mysql57-community-release-el7-9.noarch.rpm
+
+#- name: Install rpm
+# me: Install this to prevent above issue
+#   yum:
+#       name: php56w-gd
+#           state: latest
+#           shell: rpm -ivh mysql57-community-release-el7-9.noarch.rpm
+
+
+- name: Patch Server
+  yum:
+    name: '*'
+    state: latest
+
+#- name: Install Sql
+#  yum:
+#    name: "{{ sql }}"
+#    state: latest
+
+- name: Secure Install Sql
+  command: mysql_secure_installation
+
+- name: Start Sql
+  systemd:
+    name: "{{ sql }}"
+    state: started
+
+- name: Sql Status
+  systemd:
+    name: "{{ sql }}"
+    state: status
+  register: ps
+
+- debug: var=ps.stdout_lines
+
+- name: Stop Auto Start of Sql
+  shell: systemctl disable mysqld
+
+- name: Print and Copy Temp Pswd
+  shell: grep 'temporary password' /var/log/mysqld.log >> /home/flamez97/temp.log
+
+- name: Create Drupal DB
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+
+- mysql_user:
+    name: "{{ db_user }}"
+    priv: drupalbase
+    state: present
+
+#  Sql cmds to run below:
+##CREATE DATABASE drupalbase;
+##CREATE USER drupal@localhost IDENTIFIED BY 'Nicotine85!';
+##GRANT ALL PRIVILEGES ON yourdbname.* TO yourdrupaluser@localhost;
+#  Additionally, we must refresh MySQL so the system can flush the newly added
+#  privileges and for the changes to take effect, then exit your session.
+#  This can be accomplished with the following commands:
+##FLUSH PRIVILEGES;
+##exit
+#  The system is now ready for us to download and install Drupal
+
+- name: Get Drupal
+  get_url:
+    url: "{{ drupal_url }}"
+    dest: "{{ drupal_dest }}"
+
+- name: Unzip Drupal
+  unarchive:
+    src: "{{ drupal_dest }}"
+    dest: "{{ drupal_unzip }}"
+
+- name: Install pre-req rpm
+  shell: rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+- name: Install pre-req rpm
+  shell: rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+
+#remember to use these as variables
+
+- name: Install Pre-Req
+  yum:
+    name: "{{ drupal_pre_req1 }}"
+    state: latest
+
+- name: Install Pre-Req
+  yum:
+    name: php56w-mbstring
+    state: latest
+
+- name: Install Pre-Req2
+  yum:
+    name: php56w-gd
+    state: latest
+
+- name: Install Pre-Req3
+  yum:
+    name: php56w-xml
+    state: latest
+
+- name: Install Pre-Req4
+  yum:
+    name: php56w-pear
+    state: latest
+
+- name: Install Pre-Req5
+  yum:
+    name: php56w-fpm
+    state: latest
+
+#running below command to prevent issue stated below:
+##states during "installation that dpo is not allowed use the command"
+- name: Install this to prevent above issue
+  yum:
+    name: php56w-mysql
+    state: latest
+
+##Since, Drupal is currently in the root directory, let us copy the folder
+##and move it into the default httpd directory:
+#cp -r ~/cp -r ~/drupal-8.0.0/* /var/www/html
+- name: Copy html
+#  shell: cp -r ~/cp -r ~/drupal-8.0.0/* /var/www/html
+  copy:
+    src: /home/flamez97/drupal-8.0.0/
+    dest: /var/www/html/
+
+##Now to finalize the configurations on the servers side, we must change the
+##create a settings file in the sites default directory. Let’s change to that
+##directory with the following command:
+#cd /var/www/html/sites/default/
+##Copy the default.settings.php file and rename it to settings.php with the
+##following command:
+#cp -p default.settings.php settings.php
+
+- name: copy settings.php
+  copy:
+    src: "{{ php_settings }}"
+    dest: " {{ php_dest }}"
+    mode: 666
+
+##We need to modify the permissions so that the Drupal installer can edit
+#  chmod 666 settings.php
+##We also need to make a files directory, do so with the following command:
+#mkdir files
+##Modify the permissions of files with the following command:
+#chmod 777 files
+- name: Create Files Dir
+  file:
+    name: "{{ default_file }}"
+    state: present
+    mode: 777
+
+##We need to restart Apache since we installed the PHP extensions.
+#systemctl restart httpd.service
+- name: Restart Apache
+  service:
+    name: httpd
+    state: restart
+
+##If you run into issues installing drupal;
+##The pdo erro can be solved running: sudo yum install php-mysql(php56w-mysql)
+##The /default/file/ being ynreadable can be solved using: chown Apache
+
+##We should also set the processes to run automatically when the server boots
+##(php will run automatically once Apache starts):
+
+- name: Configure httpd
+  shell: chkconfig httpd on
+
+- name: Configure mysqld
+  shell: chkconfig mysqld on

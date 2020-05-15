@@ -1,0 +1,66 @@
+    - name: Install Python Policy
+      yum:
+        name: policycoreutils-python
+        state: latest
+
+    - name: Install Openssh
+      yum:
+        name: openssh-server
+        state: latest
+
+    - name: Start SSH
+      service:
+        name: sshd
+        state: started
+        enabled: yes
+
+    - name: Open HTTP
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+
+    - name: Open HTTPS
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+
+    - name: Reload Firewalld
+      service:
+        name: firewalld
+        state: reloaded
+
+    - name: Install Postfix
+      yum:
+        name: postfix
+        state: latest
+
+    - name: Enable Postfix
+      service:
+        name: postfix
+        state: started
+        enabled: yes
+
+    - name: Add Gitlab Repo
+      get_url:
+        url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh
+        dest: /home/fchima/script.rpm.sh
+        mode: '777'
+
+    - name: Run Bash Script
+      command: ./script.rpm.sh
+
+    - name: Install Gitlab
+      shell: EXTERNAL_URL="http://192.168.56.123" yum install -y gitlab-ce
+
+    - name: Install Git
+      yum:
+        name: git
+        state: present
+
+    - name: Show Git Status
+      command: gitlab-ctl status
+      register: ps
+
+    - debug: var=ps.stdout_line

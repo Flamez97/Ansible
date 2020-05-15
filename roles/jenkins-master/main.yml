@@ -1,0 +1,50 @@
+    - name: Install Java
+      yum:
+        name: java-1.8.0-openjdk.x86_64
+        state: present
+
+    - name: Add Repo
+      command: wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+    - name: Import rpm Key
+      command: rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+    - name: Yum Update
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Jenkins
+      yum:
+        name: jenkins
+        state: latest
+
+    - name: Start and Enable Jenkins
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    - name: Display Jenkins Status
+      command: systemctl status jenkins
+      register: ps
+
+    - debug: var=ps.stdout_lines
+
+    - name: Open Port 8080
+      firewalld:
+        port: 8080/tcp
+        permanent: yes
+        state: enabled
+        zone: public
+
+    - name: Reload Firewalld
+      service:
+        name: firewalld
+        state: reloaded
+
+    - name: Display Admin Password
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: ps
+
+    - debug: var=ps.stdout_lines
