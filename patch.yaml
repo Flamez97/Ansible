@@ -1,5 +1,5 @@
 ---
-- hosts: jumpbox
+- hosts: all
   gather_facts: no
 #  connection: local
 #  vars_files:
@@ -9,5 +9,5 @@
   vars:
     devops_server_type: "test"
   tasks:
-    - include_role:  name=drupal
+    - include_role:  name=patch
 #    - include_vars: ~/Playbooks/restrict
