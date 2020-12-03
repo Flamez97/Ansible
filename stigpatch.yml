@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+  - name: "MEDIUM | RHEL-07-{{ item.id }} | {{ audit_present | ternary('PATCH', 'REVERT') }} | The Red Hat Enterprise Linux operating system must audit all uses of the {{ item.call }} syscall."
+    lineinfile:
+      path: "/etc/audit/rules.d/audit.rules"
+      create: yes
+      owner: root
+      group: root
+      mode: 0600
+      line: "-a always,exit -F arch={{ arch }} -S {{ item.call }} {% if item.extra_fields is defined %}{{ item.extra_fields }} {% endif %}{{ item.include_all_auids | default(false) | ternary('', '-K auid>=1000 -K auid!=4294967295 ') }}-k {{ item.key }}"
+      state: "{{ audit_present | ternary('present', 'absent') }}"
+    with_items:
+      - b64
+      - b32
+    loop_control:
+      loop_var: arch
+    vars:
+      audit_present: "{{ item.create | default(vars['rhel_07_' + item.id]) }}"
+    notify: restart auditd
