@@ -10,7 +10,7 @@
       owner: root
       group: root
       mode: 0600
-      line: "-a always,exit -F arch={{ arch }} -S create_module -K module-change
+      line: "-a always,exit -F arch={{ arch }} -S create_module -K module-change"
 #      line: "-a always,exit -F arch={{ arch }} -S {{ item.call }} {% if item.extra_fields is defined %}{{ item.extra_fields }} {% endif %}{{ item.include_all_auids | default(false) | ternary('', '-K auid>=1000 -K auid!=4294967295 ') }}-k {{ item.key }}"
       state: "{{ audit_present | ternary('present', 'absent') }}"
     with_items:
