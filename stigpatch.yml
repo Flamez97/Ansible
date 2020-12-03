@@ -3,7 +3,7 @@
   become: true
 
   tasks:
-  - name: "MEDIUM | RHEL-07-{{ item.id }} | {{ audit_present | ternary('PATCH', 'REVERT') }} | The Red Hat Enterprise Linux operating system must audit all uses of the {{ item.call }} syscall."
+  - name: STIG - Create_Module
     lineinfile:
       path: "/etc/audit/rules.d/audit.rules"
       create: yes
