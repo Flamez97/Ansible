@@ -10,9 +10,14 @@
       owner: root
       group: root
       mode: 0600
-      line: "-a always,exit -F arch={{ arch }} -S create_module -K module-change"
+      line: "Ms. Florence likes {{ flower }}, incase you want to get a gift"
     with_items:
-      - b64
-      - b32
+      - tulips
+      - roses
+      - sunflowers
+      - daisy
+      - lilly
+      - lavender
+      - sage
     loop_control:
-      loop_var: arch
+      loop_var: flower
