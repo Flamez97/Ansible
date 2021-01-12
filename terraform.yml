@@ -27,7 +27,7 @@
     unarchive:
       src: /tmp/terraform_0.12.2_linux_amd64.zip
       dest: /usr/local/bin
-#      remote_src: yes
+      remote_src: yes
 
   - name: Test Terraform
     command: terraform -v
