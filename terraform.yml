@@ -30,7 +30,7 @@
       remote_src: yes
 
   - name: Test Terraform
-    command: terraform -v
+    shell: terraform -v
     register: ps
 
   - debug: var=ps.stdout_lines
