@@ -1,0 +1,35 @@
+---
+- hosts: all
+
+  tasks:
+  - name: Patch Server
+    yum:
+      name: '*'
+      state: latest
+
+  - name: Install wget
+    yum:
+      name: 'wget'
+      state: latest
+
+  - name: Install unzip
+    yum:
+      name: 'unzip'
+      state: latest
+
+  - name: Download Terraform File
+    get_url:
+      url: https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip
+      dest: /home/flamezk8s/terraform_0.12.2_linux_amd64.zip
+      mode: '0777'
+
+  - name: Unzip the Terraform File
+    unarchive:
+      src: /home/flamezk8s/terraform_0.12.2_linux_amd64.zip
+      dest: /usr/local/bin
+
+  - name: Test Terraform
+    command: terraform -v
+    register: ps
+
+  - debug: var=ps.stdout_lines
