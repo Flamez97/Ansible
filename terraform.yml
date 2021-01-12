@@ -28,9 +28,3 @@
       src: /tmp/terraform_0.14.4_linux_amd64.zip
       dest: /usr/local/bin
       remote_src: yes
-
-  - name: Test Terraform
-    shell: terraform -v
-    register: ps
-
-  - debug: var=ps.stdout_lines
