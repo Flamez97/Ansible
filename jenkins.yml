@@ -1,0 +1,84 @@
+---
+- hosts: localhost
+  become: true
+
+  tasks:
+  - name: Patch
+    apt:
+      name: "*"
+      state: latest
+
+  - name: Install Java
+    apt:
+      name: openjdk-11-jdk
+      state: latest
+
+  - name: Install Gnupg
+    apt:
+      name: gnupg2
+      state: present
+
+  - name: Add Jenkins key
+    apt_key:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+      state: present
+
+  - name: Add Jenkins Repo
+    apt_repository:
+      repo: 'deb https://pkg.jenkins.io/debian-stable binary/'
+      state: present
+      filename: jenkins
+
+  - name: Patch
+    apt:
+      name: "*"
+      state: latest
+
+  - name: Install Jenkins
+    apt:
+      name: jenkins
+      state: latest
+
+  - name: Wait before installing Apache
+    wait_for:
+      timeout: 30
+    delegate_to: localhost
+
+  - name: Install Apache
+    apt:
+      name: apache2
+      state: present
+
+  - name: Enable Module1
+    shell: a2enmod proxy
+
+  - name: Enable Module2
+    shell: a2enmod proxy_http
+
+  - name: Add Jenkins Config file
+    get_url:
+      url: https://jenkinsci.s3.amazonaws.com/jenkins.conf
+      dest: /etc/apache2/sites-available/jenkins.conf
+
+  - name: Insert ServerName
+    shell: curl http://checkip.amazonaws.com
+    register: ps_ip
+
+  - lineinfile:
+      path: /etc/apache2/sites-available/jenkins.conf
+      regexp: 'jenkins.example.com'
+      line: '    ServerName        {{ ps_ip.stdout }}'
+      state: present
+
+  - name: Enable Jenkins Config
+    shell: a2ensite jenkins
+
+  - name: Restart Apache
+    service:
+      name: apache2
+      state: restarted
+
+  - name: Restart Jenkins
+    service:
+      name: jenkins
+      state: restarted
