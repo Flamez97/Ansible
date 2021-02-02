@@ -5,8 +5,7 @@
   tasks:
   - name: Patch
     apt:
-      name: "*"
-      state: latest
+      update_cache: yes
 
   - name: Install Java
     apt:
@@ -31,8 +30,7 @@
 
   - name: Patch
     apt:
-      name: "*"
-      state: latest
+      update_cache: yes
 
   - name: Install Jenkins
     apt:
