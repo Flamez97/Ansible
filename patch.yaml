@@ -1,13 +1,14 @@
 ---
 - hosts: all
   gather_facts: no
-#  connection: local
-#  vars_files:
-#    - /home/flamez97/Playbooks/Remote/secret
 
-#  become: true
   vars:
     devops_server_type: "test"
   tasks:
-    - include_role:  name=patch
+    - name: Patch Server
+      yum:
+        name: '*'
+        state: latest
+
+#    - include_role:  name=patch
 #    - include_vars: ~/Playbooks/restrict
