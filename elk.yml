@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become_user: root
+
+  tasks:
+
+  - name: Import Elasticsearch GPG Key
+    rpm_key:
+      state: present
+      key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+  - name: Get Elasticsearch File
+    get_url:
+      url: https://class2o2o.s3.amazonaws.com/elastisearch.repo
+      dest: /etc/yum.repos.d/elastisearch.repo
+
+  - name: Install Elasticsearch
+    yum:
+      name: elasticsearch
+      state: present
+      enablerepo: "elastisearch"
