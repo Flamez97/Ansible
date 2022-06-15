@@ -14,6 +14,11 @@
       url: https://class2o2o.s3.amazonaws.com/elastisearch.repo
       dest: /etc/yum.repos.d/elastisearch.repo
 
+  - name: Wait before Installation
+    wait_for:
+      timeout: 30
+    delegate_to: localhost
+
   - name: Install Elasticsearch
     yum:
       name: elasticsearch
