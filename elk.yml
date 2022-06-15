@@ -22,4 +22,4 @@
     yum:
       name: elasticsearch
       state: present
-      enablerepo: "elastisearch"
+      enablerepo: "elasticsearch"
