@@ -1,9 +1,8 @@
 ---
 - hosts: all
-  become_user: root
+#  become_user: root
 
   tasks:
-
   - name: Import Elasticsearch GPG Key
     rpm_key:
       state: present
