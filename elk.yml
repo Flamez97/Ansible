@@ -4,19 +4,34 @@
   become: true
 
   tasks:
+  
   - name: Import Elasticsearch GPG Key
     rpm_key:
       state: present
       key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
-  - name: Get Elasticsearch File
-    get_url:
-      url: https://class2o2o.s3.amazonaws.com/elastisearch.repo
-      dest: /etc/yum.repos.d/elastisearch.repo
+ # - name: Get Elasticsearch File
+ #   get_url:
+ #     url: https://class2o2o.s3.amazonaws.com/elastisearch.repo
+ #     dest: /etc/yum.repos.d/elasticsearch.repo
+  
+  - name: Create Elasticsearch File
+    yum_repository:
+      name: elasticsearch
+      description: Elasticsearch repository for 8.x packages
+      baseurl: https://artifacts.elastic.co/packages/8.x/yum
+      gpgcheck: yes
+      gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      enabled: no
+      state: present
+#gpgcheck=1
+#enabled=0
+#autorefresh=1
+#type=rpm-md
 
   - name: Pause for 1 minute
     pause:
-      minutes: 1
+      seconds: 15
 
   - name: Install Elasticsearch
     yum:
