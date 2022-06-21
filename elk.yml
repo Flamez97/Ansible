@@ -24,10 +24,6 @@
       gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
       enabled: no
       state: present
-#gpgcheck=1
-#enabled=0
-#autorefresh=1
-#type=rpm-md
 
   - name: Pause for 1 minute
     pause:
