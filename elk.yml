@@ -4,16 +4,12 @@
   become: true
 
   tasks:
-  
+  ##---Installing Elasticsearch---
+
   - name: Import Elasticsearch GPG Key
     rpm_key:
       state: present
       key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-
- # - name: Get Elasticsearch File
- #   get_url:
- #     url: https://class2o2o.s3.amazonaws.com/elastisearch.repo
- #     dest: /etc/yum.repos.d/elasticsearch.repo
   
   - name: Create Elasticsearch File
     yum_repository:
@@ -22,15 +18,80 @@
       baseurl: https://artifacts.elastic.co/packages/8.x/yum
       gpgcheck: yes
       gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-      enabled: no
+      enabled: yes
       state: present
 
-  - name: Pause for 1 minute
+  - name: Pause for 30 seconds
     pause:
-      seconds: 15
+      seconds: 30
 
   - name: Install Elasticsearch
     yum:
       name: elasticsearch
-      state: present
+      state: latest
       enablerepo: "elasticsearch"
+
+  ##---Installing Kibana---
+
+  - name: Install Kibana
+    yum:
+      name: kibana
+      state: latest
+      enablerepo: "elasticsearch"
+
+  - name: Generate Enrollment Token
+    command: bin/elasticsearch-create-enrollment-token -s kibana
+
+  - name: Reload Systemd
+    systemd:
+      daemon_reload: yes
+
+  - name: Enable Kibana
+    systemd:
+      name: kibana
+      enabled: yes
+
+  - name: Start Kibana
+    service:
+      name: kibana
+      state: started
+
+  ##---Installing Logstash---
+
+  - name: Install Logstash
+    yum:
+      name: logstash
+      state: latest
+      enablerepo: "elasticsearch"
+
+  - name: Pause for 15 seconds
+    pause:
+      seconds: 15
+
+  - name: Start Logstash
+    systemd:
+      name: logstash
+      state: started
+
+  ##--Installing Beats---
+
+  - name: Install Auditbeat
+    yum:
+      name: auditbeat
+      state: latest
+
+  - name: Enable Auditbeat
+    systemd:
+      name: auditbeat
+      enabled: yes
+
+  - name: Install Filebeat
+    yum:
+      name: auditbeat
+      state: latest
+
+  - name: Enable Filebeat
+    systemd:
+      name: filebeat
+      enabled: yes
+
