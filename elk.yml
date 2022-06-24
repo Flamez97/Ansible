@@ -74,7 +74,7 @@
       state: started
 
   ##--Installing Beats---
-
+  ##Auditbeat
   - name: Install Auditbeat
     yum:
       name: auditbeat
@@ -85,6 +85,7 @@
       name: auditbeat
       enabled: yes
 
+  ##Filebeat
   - name: Install Filebeat
     yum:
       name: auditbeat
@@ -95,3 +96,41 @@
       name: filebeat
       enabled: yes
 
+  ##Functionbeat
+  #- name:
+
+  ##Heartbeat
+  - name: Install Heartbeat
+    yum:
+      name: heartbeat-elastic
+      state: latest
+
+  - name: Enable Heartbeat
+    systemd:
+      name: heartbeat-elastic
+      enabled: yes
+
+  ##Metricbeat
+  - name: Install Metricbeat
+    yum:
+      name: metricbeat
+      state: latest
+
+  - name: Enable Metricbeat
+    systemd:
+      name: metricbeat
+      enabled: yes
+
+  ##Packetbeat
+  - name: Install Packetbeat
+    yum:
+      name: packetbeat
+      state: latest
+
+  - name: Enable Packetbeat
+    systemd:
+      name: packetbeat
+      enabled: yes
+
+  ##Winlogbeat
+  #- name:
