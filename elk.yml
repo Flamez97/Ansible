@@ -40,7 +40,7 @@
       enablerepo: "elasticsearch"
 
   - name: Generate Enrollment Token
-    command: bin/elasticsearch-create-enrollment-token -s kibana
+    command: /bin/elasticsearch-create-enrollment-token -s kibana
 
   - name: Reload Systemd
     systemd:
