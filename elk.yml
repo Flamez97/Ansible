@@ -39,8 +39,8 @@
       state: latest
       enablerepo: "elasticsearch"
 
-  - name: Generate Enrollment Token
-    command: /bin/elasticsearch-create-enrollment-token -s kibana
+  - name: Create Token
+    command: /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
 
   - name: Reload Systemd
     systemd:
