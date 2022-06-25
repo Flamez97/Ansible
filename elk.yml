@@ -134,3 +134,45 @@
 
   ##Winlogbeat
   #- name:
+
+
+  ##---Ubuntu---Installing Logstash---
+
+  - name: Get Apt Key
+    get_url:
+      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      dest: /temp/GPG-KEY-elasticsearch
+
+  - name: Add Apt Key from file
+    apt_key:
+      file: /temp/GPG-KEY-elasticsearch
+      state: present
+
+  - name: Add Apt Key from URL
+    apt_key:
+      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      state: present
+
+  - name: Install Apt Transport
+    apt:
+      name: apt-transport-https
+      state: latest
+
+  - name: Add Apt Repo
+    apt_repository:
+      repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
+      state: present
+
+  - name: Update Ubuntu
+    apt:
+      update_cache: yes
+
+  - name: Install Logstash
+    apt:
+      name: logstash
+      state: latest
+
+  - name: Start Logstash
+    systemd:
+      name: logstash
+      state: started
