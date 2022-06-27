@@ -21,15 +21,25 @@
       enabled: yes
       state: present
 
-  - name: Pause for 30 seconds
+  - name: Pause for 5 seconds
     pause:
-      seconds: 30
+      seconds: 5
 
   - name: Install Elasticsearch
     yum:
       name: elasticsearch
       state: latest
       enablerepo: "elasticsearch"
+
+  - name: Enable Elasticsearch
+    systemd:
+      name: elasticsearch
+      enabled: yes
+
+  - name: Start Elasticsearch
+    service:
+      name: elasticsearch
+      state: started
 
   ##---Installing Kibana---
 
@@ -64,9 +74,9 @@
       state: latest
       enablerepo: "elasticsearch"
 
-  - name: Pause for 15 seconds
+  - name: Pause for 5 seconds
     pause:
-      seconds: 15
+      seconds: 5
 
   - name: Start Logstash
     systemd:
@@ -88,7 +98,7 @@
   ##Filebeat
   - name: Install Filebeat
     yum:
-      name: auditbeat
+      name: filebeat
       state: latest
 
   - name: Enable Filebeat
@@ -134,45 +144,3 @@
 
   ##Winlogbeat
   #- name:
-
-
-  ##---Ubuntu---Installing Logstash---
-
-  - name: Get Apt Key
-    get_url:
-      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-      dest: /temp/GPG-KEY-elasticsearch
-
-  - name: Add Apt Key from file
-    apt_key:
-      file: /temp/GPG-KEY-elasticsearch
-      state: present
-
-  - name: Add Apt Key from URL
-    apt_key:
-      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-      state: present
-
-  - name: Install Apt Transport
-    apt:
-      name: apt-transport-https
-      state: latest
-
-  - name: Add Apt Repo
-    apt_repository:
-      repo: deb https://artifacts.elastic.co/packages/8.x/apt stable main
-      state: present
-
-  - name: Update Ubuntu
-    apt:
-      update_cache: yes
-
-  - name: Install Logstash
-    apt:
-      name: logstash
-      state: latest
-
-  - name: Start Logstash
-    systemd:
-      name: logstash
-      state: started
