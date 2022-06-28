@@ -144,3 +144,17 @@
 
   ##Winlogbeat
   #- name:
+
+  ##Enable FireWall for Kibana
+  - name: Enable Kibana Port
+    firewalld:
+      port: 5601/ tcp
+      permanent: true 
+      state: enabled
+
+  ##Restart Firewall
+  - name: Restart Firewalld
+    systemd:
+      name: firewalld
+      state: reloaded
+
