@@ -148,7 +148,7 @@
   ##Enable FireWall for Kibana
   - name: Enable Kibana Port
     firewalld:
-      port: 5601/ tcp
+      port: 5601/tcp
       permanent: true 
       state: enabled
 
