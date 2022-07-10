@@ -11,9 +11,14 @@
   tasks:
 #    - include_role:  name=gitlab
 #    - include_vars: ~/Playbooks/restrict
+    - name: Patch server
+      yum:
+        name: '*'
+        state: latest
+        
     - name: Install Python Policy
       yum:
-        name: policycoreutils-python
+        name: policycoreutils
         state: latest
 
     - name: Install Openssh
