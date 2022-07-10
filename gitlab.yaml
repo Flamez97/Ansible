@@ -50,7 +50,7 @@
         state: reloaded
 
     - name: Install Postfix
-      yum:
+      dnf:
         name: postfix
         state: latest
 
