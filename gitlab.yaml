@@ -54,16 +54,16 @@
         name: firewalld
         state: reloaded
 
-    - name: Install Postfix
-      dnf:
-        name: postfix
-        state: latest
+#    - name: Install Postfix
+#      dnf:
+#        name: postfix
+#        state: latest
 
-    - name: Enable Postfix
-      service:
-        name: postfix
-        state: started
-        enabled: yes
+#    - name: Enable Postfix
+#      service:
+#        name: postfix
+#        state: started
+#        enabled: yes
 
     - name: Add Gitlab Repo
       get_url:
