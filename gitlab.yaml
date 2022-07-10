@@ -68,7 +68,7 @@
     - name: Add Gitlab Repo
       get_url:
         url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh
-        dest: /home/fchima/script.rpm.sh
+        dest: /home/flamez97/script.rpm.sh
         mode: '777'
 
     - name: Run Bash Script
