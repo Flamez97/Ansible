@@ -16,6 +16,11 @@
         name: '*'
         state: latest
         
+    - name: Patch server
+      dnf:
+        name: '*'
+        state: latest
+        
     - name: Install Python Policy
       yum:
         name: policycoreutils
