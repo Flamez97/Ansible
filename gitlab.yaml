@@ -79,6 +79,6 @@
 
     - name: Show Git Status
       command: gitlab-ctl status
-      register: ps
+      register: gitlab
 
-    - debug: var=ps.stdout_line
+    - debug: var=gitlab.stdout_lines
