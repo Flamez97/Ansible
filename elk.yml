@@ -51,6 +51,9 @@
 
   - name: Create Token
     command: /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+    register: token
+ 
+  - debug: var=token.stdout_lines 
 
   - name: Reload Systemd
     systemd:
