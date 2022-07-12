@@ -16,11 +16,6 @@
         name: '*'
         state: latest
         
-    - name: Patch server
-      dnf:
-        name: '*'
-        state: latest
-        
     - name: Install Python Policy
       yum:
         name: policycoreutils
@@ -54,28 +49,28 @@
         name: firewalld
         state: reloaded
 
-#    - name: Install Postfix
-#      dnf:
-#        name: postfix
-#        state: latest
+    - name: Install Postfix
+      yum:
+        name: postfix
+        state: latest
 
-#    - name: Enable Postfix
-#      service:
-#        name: postfix
-#        state: started
-#        enabled: yes
+    - name: Enable Postfix
+      service:
+        name: postfix
+        state: started
+        enabled: yes
 
     - name: Add Gitlab Repo
       get_url:
         url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh
-        dest: /home/flamez97/script.rpm.sh
+        dest: /home/flamezk8s/script.rpm.sh
         mode: '777'
 
     - name: Run Bash Script
       command: ./script.rpm.sh
 
     - name: Install Gitlab
-      shell: EXTERNAL_URL="http://192.168.1.43" yum install -y gitlab-ce
+      shell: EXTERNAL_URL="http://192.168.1.97" yum install -y gitlab-ce
 
     - name: Install Git
       yum:
