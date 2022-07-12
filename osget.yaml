@@ -4,7 +4,7 @@
   tasks:
   - name: Get OS Family
     debug:
-     msg: "Is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+     msg: "OS Is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
 
   - name: Show Git Status
     command: gitlab-ctl status
