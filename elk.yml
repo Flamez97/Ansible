@@ -30,12 +30,20 @@
       name: elasticsearch
       state: latest
       enablerepo: "elasticsearch"
+   
+  - name: Pause for 30 seconds
+    pause:
+      seconds: 30
 
   - name: Enable Elasticsearch
     systemd:
       name: elasticsearch
       enabled: yes
 
+  - name: Pause for 30 seconds
+    pause:
+      seconds: 30
+  
   - name: Start Elasticsearch
     service:
       name: elasticsearch
