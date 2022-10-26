@@ -70,7 +70,7 @@
       command: ./script.rpm.sh
 
     - name: Install Gitlab
-      shell: EXTERNAL_URL="http://192.168.1.95" yum install -y gitlab-ce
+      shell: EXTERNAL_URL="http://192.168.1.19" yum install -y gitlab-ce
 
     - name: Install Git
       yum:
