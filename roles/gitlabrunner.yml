@@ -1,0 +1,22 @@
+---
+- hosts: all
+  gather_facts: no
+
+  tasks:
+
+    - name: Patch server
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Add Gitlab Repo
+      get_url:
+        url: https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh
+        dest: /home/flamezk8s/runnerscript.rpm.sh
+        mode: '777'
+
+    - name: Run Bash Script
+      command: ./runnerscript.rpm.sh
+
+    - name: Install Gitlab
+      shell: yum install -y gitlab-runner
