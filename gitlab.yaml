@@ -15,7 +15,7 @@
       yum:
         name: '*'
         state: latest
-        
+
     - name: Install Python Policy
       yum:
         name: policycoreutils
@@ -70,7 +70,7 @@
       command: ./script.rpm.sh
 
     - name: Install Gitlab
-      shell: EXTERNAL_URL="http://192.168.1.19" yum install -y gitlab-ce
+      shell: EXTERNAL_URL="http://192.168.56.233" yum install -y gitlab-ce
 
     - name: Install Git
       yum:
