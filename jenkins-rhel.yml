@@ -40,7 +40,7 @@
         state: started
         enabled: yes
 
-    - name: Wait before installing Apache
+    - name: Wait Before Checking Jenkins Stats
       wait_for:
         timeout: 120
       delegate_to: localhost
