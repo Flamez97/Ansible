@@ -4,25 +4,29 @@
   become: yes
 
   tasks:
-
-    - name: Install yum-utils is installed
-      yum:
-        name: yum-utils
-        state: latest
-
     - name: Add Jenkins repository to yum
       get_url:
-        url: http://pkg.jenkins.io/redhat-stable/jenkins.repo
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
         dest: /etc/yum.repos.d/jenkins.repo
 
     - name: Import Jenkins GPG key
       rpm_key:
-        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
         state: present
+
+    - name: Patch Server
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Font
+      yum:
+        name: fontconfig
+        state: latest
 
     - name: Install Java (OpenJDK)
       yum:
-        name: java-1.8.0-openjdk
+        name: java-17-openjdk
         state: present
 
     - name: Install Jenkins
@@ -36,22 +40,31 @@
         state: started
         enabled: yes
 
-    - name: Open firewall ports for Jenkins
+    - name: Wait before installing Apache
+      wait_for:
+        timeout: 120
+      delegate_to: localhost
+
+    - name: Display Jenkins Status
+      command: systemctl status jenkins
+      register: ps
+
+    - debug: var=ps.stdout_lines
+
+    - name: Open Port 8080
       firewalld:
         port: 8080/tcp
         permanent: yes
         state: enabled
-        immediate: yes
+        zone: public
 
-    - name: Reload firewalld
-      command: firewall-cmd --reload
-      when: firewalld_running.stdout == "running"
-      register: firewalld_running
-      changed_when: false
-      failed_when: false
+    - name: Reload Firewalld
+      service:
+        name: firewalld
+        state: reloaded
 
-    - name: Ensure firewalld is running
-      shell: firewall-cmd --state
-      register: firewalld_running
-      changed_when: false
-      failed_when: false
+    - name: Display Admin Password
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: ps
+
+    - debug: var=ps.stdout_lines
