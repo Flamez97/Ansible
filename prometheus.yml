@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Download Prometheus
+      get_url:
+        url: https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+        dest: ~/prometheus-2.52.0.linux-amd64.tar.gz
+
+    - name: Unzip the Prometheus File
+      unarchive:
+        src: ~/prometheus-2.52.0.linux-amd64.tar.gz
+        dest: ~/
+        remote_src: yes
