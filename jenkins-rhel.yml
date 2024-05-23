@@ -40,10 +40,10 @@
         state: started
         enabled: yes
 
-    - name: Wait Before Checking Jenkins Stats
-      wait_for:
-        timeout: 30
-      delegate_to: localhost
+#    - name: Wait Before Checking Jenkins Stats
+#      wait_for:
+#        timeout: 30
+#      delegate_to: localhost
 
     - name: Display Jenkins Status
       command: systemctl status jenkins
