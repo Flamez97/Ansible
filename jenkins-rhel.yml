@@ -57,8 +57,14 @@
         name: firewalld
         state: reloaded
 
-    - name: Display Admin Password
-      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+#    - name: Display Admin Password
+#      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+#      register: ps
+#
+#    - debug: var=ps.stdout_lines
+
+    - name: Display Jenkins Version
+      shell: jenkins --version
       register: ps
 
     - debug: var=ps.stdout_lines
