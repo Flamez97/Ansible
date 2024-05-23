@@ -34,7 +34,7 @@
         name: jenkins
         state: latest
 
-    - name: Ensure Jenkins service is started
+    - name: Start Jenkins and Enable Start Onboot
       service:
         name: jenkins
         state: started
@@ -42,7 +42,7 @@
 
     - name: Wait Before Checking Jenkins Stats
       wait_for:
-        timeout: 120
+        timeout: 30
       delegate_to: localhost
 
     - name: Display Jenkins Status
