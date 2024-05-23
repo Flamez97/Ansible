@@ -44,15 +44,6 @@
 #      wait_for:
 #        timeout: 30
 #      delegate_to: localhost
-    - name: Pause for 5minutes to Let Jenkins Start
-      ansible.builtin.pause:
-        minutes: 5
-
-    - name: Display Jenkins Status
-      command: systemctl status jenkins
-      register: ps
-
-    - debug: var=ps.stdout_lines
 
     - name: Open Port 8080
       firewalld:
@@ -68,6 +59,12 @@
 
     - name: Display Admin Password
       shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      register: ps
+
+    - debug: var=ps.stdout_lines
+
+    - name: Display Jenkins Status
+      command: systemctl status jenkins
       register: ps
 
     - debug: var=ps.stdout_lines
