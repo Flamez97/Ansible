@@ -26,7 +26,7 @@
 
     - name: Install Java (OpenJDK)
       yum:
-        name: java-11-openjdk
+        name: java-17-openjdk
         state: present
 
     - name: Install Jenkins
