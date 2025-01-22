@@ -5,7 +5,7 @@
 
   tasks:
   - name: Install Apache
-    dnf:
+    yum:
       name: httpd
       state: latest
 
@@ -28,7 +28,7 @@
   - debug: var=port.stdout_lines
 
   - name: Install MariaDB
-    dnf:
+    yum:
       name: mariadb-server
     state: latest
     
@@ -44,7 +44,7 @@
   - debug: sudo mysql
 
   - name: Install PHP
-    dnf: 
+    yum: 
       name: php-mysqlnd
     state: latest
 
