@@ -1,6 +1,6 @@
 ---
 - name: Installing LAMP
-  hosts: appserver
+  hosts: all
   become: true
 
   tasks:
