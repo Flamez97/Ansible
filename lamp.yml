@@ -10,10 +10,9 @@
       state: latest
 
   - name: Start Apache
-    systemd:
+    service:
       name: httpd
       state: started
-      enabled: yes
 
   - name: Enable http Port
     firewalld:
