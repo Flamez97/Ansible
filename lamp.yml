@@ -38,10 +38,10 @@
       enabled: yes
   
   - name: Confirm MYSQL status
-    command: sudo mysql_secure_installation
-    register: MYSQL
+    command: sudo mysql_secure_installation -y
+    register: mysql
   
-  - debug: sudo mysql
+  - debug: var=mysql.stdout_lines
 
   - name: Install PHP
     yum: 
