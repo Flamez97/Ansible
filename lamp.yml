@@ -23,14 +23,14 @@
   
   - name: Confirm http Port Status
     command: sudo firewall-cmd --permanent --list-all
-    registar: port
+    register: port
 
   - debug: var=port.stdout_lines
 
   - name: Install MariaDB
     yum:
       name: mariadb-server
-    state: latest
+      state: latest
     
   - name: Start MariaDB 
     systemd: 
@@ -46,7 +46,7 @@
   - name: Install PHP
     yum: 
       name: php-mysqlnd
-    state: latest
+      state: latest
 
   - name: Start PHP
     systemd:
