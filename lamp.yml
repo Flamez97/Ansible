@@ -1,19 +1,18 @@
 ---
 - name: Installing LAMP
-  hosts: appserver
+  hosts: all
   become: true
 
   tasks:
   - name: Install Apache
-    dnf:
+    yum:
       name: httpd
       state: latest
 
   - name: Start Apache
-    systemd:
+    service:
       name: httpd
       state: started
-      enabled: yes
 
   - name: Enable http Port
     firewalld:
@@ -23,14 +22,14 @@
   
   - name: Confirm http Port Status
     command: sudo firewall-cmd --permanent --list-all
-    registar: port
+    register: port
 
   - debug: var=port.stdout_lines
 
   - name: Install MariaDB
-    dnf:
+    yum:
       name: mariadb-server
-    state: latest
+      state: latest
     
   - name: Start MariaDB 
     systemd: 
@@ -38,15 +37,15 @@
       enabled: yes
   
   - name: Confirm MYSQL status
-    command: sudo mysql_secure_installation
-    register: MYSQL
+    command: sudo mysql_secure_installation -y
+    register: mysql
   
-  - debug: sudo mysql
+  - debug: var=mysql.stdout_lines
 
   - name: Install PHP
-    dnf: 
+    yum: 
       name: php-mysqlnd
-    state: latest
+      state: latest
 
   - name: Start PHP
     systemd:
