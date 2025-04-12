@@ -1,0 +1,50 @@
+---
+- hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Patch server
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+
+    - name: Install Prerequisites
+      apt:
+        name: gnupg
+        state: latest
+
+    - name: Install Prerequisites
+      apt:
+        name: software-properties-common
+        state: latest
+
+    - name: Install HarshiCorp GPG Key
+      apt:
+         state:
+         name:
+
+    - name: Patch server
+      apt:
+         state:
+         name:
+
+    - name: Patch server
+      apt:
+         state:
+         name:
+
+    - name: Patch server
+      apt:
+         state:
+         name:
+
+    - name: Patch server
+      apt:
+         state:
+         name:
+
+      - name: Patch server
+      apt:
+         state:
+         name:
