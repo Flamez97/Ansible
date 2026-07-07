@@ -1,13 +1,14 @@
 ---
 - hosts: all
   gather_facts: no
-#  connection: local
-#  vars_files:
-#    - /home/flamez97/Playbooks/Remote/secret
-
-#  become: true
+  ignore_unreachable: true
   vars:
+    ansible_python_interpreter: auto_silent
     devops_server_type: "test"
+  #  connection: local
+  #  vars_files:
+  #    - /home/flamez97/Playbooks/Remote/secret
+
   tasks:
-    - include_role:  name=drupal
+    - role: drupal
 #    - include_vars: ~/Playbooks/restrict
